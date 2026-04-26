@@ -108,6 +108,12 @@ const routes = [
         meta: { title: '通知公告', roles: ['admin', 'teacher', 'student'] }
       },
       {
+        path: 'notices/:id',
+        name: 'NoticeDetail',
+        component: () => import('@/views/notices/NoticeDetail.vue'),
+        meta: { title: '公告详情', roles: ['admin', 'teacher', 'student'] }
+      },
+      {
         path: 'users',
         name: 'Users',
         component: () => import('@/views/users/UserList.vue'),

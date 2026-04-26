@@ -20,6 +20,7 @@ const courseRoutes = require('./routes/course.routes')
 const optionRoutes = require('./routes/option.routes')
 const scoreRoutes = require('./routes/score.routes')
 const attendanceRoutes = require('./routes/attendance.routes')
+const noticeRoutes = require('./routes/notice.routes')
 
 // 健康检查接口（无需认证）
 app.get('/api/health', (req, res) => {
@@ -45,6 +46,7 @@ app.use('/api/courses', courseRoutes)
 app.use('/api/options', optionRoutes)
 app.use('/api/scores', scoreRoutes)
 app.use('/api/attendance', attendanceRoutes)
+app.use('/api/notices', noticeRoutes)
 
 // 启动服务
 const PORT = process.env.PORT || 3000

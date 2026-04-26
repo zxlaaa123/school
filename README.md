@@ -170,7 +170,7 @@ schoolnet/
 | 第 3 阶段 | 模拟数据导入 | ✅ 已完成 |
 | 第 4 阶段 | 登录权限（JWT + 角色菜单） | ✅ 已完成 |
 | 第 5 阶段 | 基础数据管理（CRUD） | ✅ 已完成（专业/教师/班级/学生/课程） |
-| 第 6 阶段 | 核心业务（成绩/考勤/公告） | ⬜ 成绩管理已完成，考勤/公告待开发 |
+| 第 6 阶段 | 核心业务（成绩/考勤/公告） | ✅ 成绩管理、考勤管理已完成，公告待开发 |
 | 第 7 阶段 | 看板与个人中心 | ⬜ 待开发 |
 | 第 8 阶段 | 测试优化 | ⬜ 待开发 |
 | 第 9 阶段 | 毕设包装 | ⬜ 待开发 |
@@ -284,7 +284,11 @@ npm run preview  # 预览构建结果
   - 自动评定等级：优秀/良好/中等/及格/不及格
   - 重复录入拦截：同一学生+同一课程+同一学期唯一
   - 角色权限：管理员全权限、教师仅自己课程、学生仅个人
-- 考勤登记、查询和统计（待开发）
+- 考勤登记、查询和统计（**已完成**）
+  - 五种考勤状态：正常/迟到/早退/请假/缺勤
+  - 重复登记拦截：同一学生+同一课程+同一天唯一
+  - 角色权限：管理员全权限、教师仅自己课程、学生仅个人
+  - 统计卡片：正常率、迟到、早退、请假、缺勤数量
 - 奖惩记录管理（待开发）
 - 通知公告管理（待开发）
 - 首页数据看板
@@ -367,3 +371,48 @@ npm run preview  # 预览构建结果
 - `frontend/src/views/scores/ScoreList.vue` - 成绩管理页面
 - `frontend/src/views/scores/MyScores.vue` - 我的成绩页面
 - `frontend/src/api/options.js` - 新增课程/学生下拉选项接口
+
+---
+
+## 13. 考勤管理模块说明
+
+### 后端接口
+
+| 接口 | 方法 | 说明 | 权限 |
+|---|---|---|---|
+| `/api/attendance` | GET | 分页查询考勤列表 | 全部角色 |
+| `/api/attendance/:id` | GET | 查询考勤详情 | 全部角色（受限） |
+| `/api/attendance` | POST | 新增考勤记录 | 管理员/教师 |
+| `/api/attendance/batch` | POST | 批量新增考勤记录 | 管理员/教师 |
+| `/api/attendance/:id` | PUT | 修改考勤记录 | 管理员/教师（受限） |
+| `/api/attendance/:id` | DELETE | 删除考勤记录 | 仅管理员 |
+| `/api/attendance/statistics` | GET | 考勤统计信息 | 全部角色（受限） |
+
+### 前端页面
+
+| 页面 | 路径 | 说明 | 权限 |
+|---|---|---|---|
+| 考勤管理 | `/attendance` | 搜索/表格/分页/新增/编辑/删除/统计 | 管理员/教师 |
+| 我的考勤 | `/my-attendance` | 学生查看个人考勤 | 学生 |
+
+### 业务规则
+
+1. **考勤状态**：normal（正常）、late（迟到）、leave_early（早退）、leave（请假）、absent（缺勤）
+2. **重复校验**：同一学生+同一课程+同一天只能有一条考勤记录
+3. **权限控制**：
+   - 管理员：可管理全部考勤
+   - 教师：只能管理自己教授的课程考勤
+   - 学生：只能查看个人考勤（无增删改权限）
+4. **统计功能**：正常率、迟到数、早退数、请假数、缺勤数
+
+### 相关文件
+
+**后端：**
+- `backend/src/services/attendance.service.js` - 考勤业务逻辑
+- `backend/src/controllers/attendance.controller.js` - 考勤控制器
+- `backend/src/routes/attendance.routes.js` - 考勤路由
+
+**前端：**
+- `frontend/src/api/attendance.js` - 考勤接口封装
+- `frontend/src/views/attendance/AttendanceList.vue` - 考勤管理页面
+- `frontend/src/views/attendance/MyAttendance.vue` - 我的考勤页面
